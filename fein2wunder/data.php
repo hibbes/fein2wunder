@@ -20,40 +20,6 @@ if (!file_exists('data')) {
 	mkdir('data', 0755, true);
 }
 
-//Wunderapikey-Erweiterung *****************************
-date_default_timezone_set('UTC');
-$wunderkey = $_GET["wunderkey"];
-$wunderid = $_GET["wunderid"];
-
-$wunderstd=date(H);
-$wundermin=date(i);
-$wundersek=date(s);
-
-$wunderdate=$today."+".$wunderstd."%3A".$wundermin."%3A".$wundersek; 
-$fahrenheit=round((($values['temperature']*1.8)+32),1);
-//$dew=(17.271*$values['temperature'])/(237.7+$values['temperature'])+log($values['humidity']/100);
-$dew=$abs_feuchte = (((0.000002*pow($values['temperature'],4))+(0.0002*pow($values['temperature'],3))+(0.0095*pow($values['temperature'],2))+(0.337*$values['temperature'])+4.9034)*$values['humidity'])/100;  
-$dewptf=round(($dew*1.8)+32,1);
-
-$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=".$wunderdate."&tempf=".$fahrenheit."&dewptf=".$dewptf."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
-
-// Get cURL resource
-
-$curl = curl_init();
-// Set some options - we are passing in a useragent too here
-curl_setopt_array($curl, array(
-		CURLOPT_RETURNTRANSFER => 1,
-		CURLOPT_URL => $wunderurl,
-		CURLOPT_USERAGENT => 'ESP-Wunderground-Update'
-));
-// Send the request & save response to $resp
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-$resp = curl_exec($curl);
-// Close request to clear up some resources
-curl_close($curl);
-
-// Ende der Modifikation ***********************************
-
 
 // save data values to CSV (one per day)
 $datafile = "data/data-".$headers['Sensor']."-".$today.".csv";
@@ -82,6 +48,43 @@ if (! isset($values["samples"])) { $values["samples"] = ""; }
 if (! isset($values["min_micro"])) { $values["min_micro"] = ""; }
 if (! isset($values["max_micro"])) { $values["max_micro"] = ""; }
 if (! isset($values["signal"])) { $values["signal"] = ""; } else { $values["signal"] = substr($values["signal"],0,-4); }
+
+//Wunderapikey-Erweiterung *****************************
+date_default_timezone_set('UTC');
+$wunderkey = $_GET["wunderkey"];
+$wunderid = $_GET["wunderid"];
+
+$wunderdate=$today."+".date(H)."%3A".date(i)."%3A".date(s);
+$fahrenheit=round((($values['temperature']*1.8)+32),1);
+//$dew=(17.271*$values['temperature'])/(237.7+$values['temperature'])+log($values['humidity']/100);
+$dew = (((0.000002*pow($values['temperature'],4))+(0.0002*pow($values['temperature'],3))+(0.0095*pow($values['temperature'],2))+(0.337*$values['temperature'])+4.9034)*$values['humidity'])/100;
+
+if($dew==0){$dew=NULL;}
+else{$dewptf=round(($dew*1.8)+32,1);}
+
+$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=".$wunderdate."&tempf=".$fahrenheit."&dewptf=".$dewptf."&baromin=".$values['BMP_pressure']."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
+
+// Get cURL resource
+
+$curl = curl_init();
+// Set some options - we are passing in a useragent too here
+curl_setopt_array($curl, array(
+		CURLOPT_RETURNTRANSFER => 1,
+		CURLOPT_URL => $wunderurl,
+		CURLOPT_USERAGENT => 'ESP-Wunderground-Update'
+));
+// Send the request & save response to $resp
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+$resp = curl_exec($curl);
+// Close request to clear up some resources
+curl_close($curl);
+
+// Ende der Modifikation ***********************************
+
+
+
+
+
 $outfile = fopen($datafile,"a");
 fwrite($outfile,$now.";".$values["durP1"].";".$values["ratioP1"].";".$values["P1"].";".$values["durP2"].";".$values["ratioP2"].";".$values["P2"].";".$values["SDS_P1"].";".$values["SDS_P2"].";".$values["temperature"].";".$values["humidity"].";".$dew.";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$wunderdate.";".$wunderid.";".$wunderkey.";".$wunderurl.";".$resp."\n");
 fclose($outfile);
