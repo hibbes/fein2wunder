@@ -62,7 +62,11 @@ $dew = (((0.000002*pow($values['temperature'],4))+(0.0002*pow($values['temperatu
 if($dew==0){$dew=NULL;}
 else{$dewptf=round(($dew*1.8)+32,1);}
 
-$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=".$wunderdate."&tempf=".$fahrenheit."&dewptf=".$dewptf."&baromin=".$values['BMP_pressure']."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
+if($values['BMP_pressure']!=NULL){
+  $baroinch=round($values['BMP_pressure']/33.8638866667,2);
+} else {$baroinch = NULL;}
+
+$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=".$wunderdate."&tempf=".$fahrenheit."&dewptf=".$dewptf."&baromin=".$baroinch."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
 // Get cURL resource
 
