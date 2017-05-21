@@ -55,7 +55,10 @@ $wunderkey = $_GET["wunderkey"];
 $wunderid = $_GET["wunderid"];
 
 $wunderdate=$today."+".date(H)."%3A".date(i)."%3A".date(s);
+
+if($values['temperature']!=NULL){
 $fahrenheit=round((($values['temperature']*1.8)+32),1);
+}
 //$dew=(17.271*$values['temperature'])/(237.7+$values['temperature'])+log($values['humidity']/100);
 $dew = (((0.000002*pow($values['temperature'],4))+(0.0002*pow($values['temperature'],3))+(0.0095*pow($values['temperature'],2))+(0.337*$values['temperature'])+4.9034)*$values['humidity'])/100;
 
