@@ -72,7 +72,7 @@ if($values['BMP_pressure']!=NULL){
 $wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=".$wunderdate."&tempf=".$fahrenheit."&dewptf=".$dewptf."&baromin=".$baroinch."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
 // Get cURL resource
-
+ 
 $curl = curl_init();
 // Set some options - we are passing in a useragent too here
 curl_setopt_array($curl, array(
@@ -87,8 +87,6 @@ $resp = curl_exec($curl);
 curl_close($curl);
 
 // Ende der Modifikation ***********************************
-
-
 
 
 
