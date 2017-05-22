@@ -49,12 +49,12 @@ if (! isset($values["min_micro"])) { $values["min_micro"] = ""; }
 if (! isset($values["max_micro"])) { $values["max_micro"] = ""; }
 if (! isset($values["signal"])) { $values["signal"] = ""; } else { $values["signal"] = substr($values["signal"],0,-4); }
 
-//Wunderapikey-Erweiterung *****************************
-date_default_timezone_set('UTC');
-$wunderkey = $_GET["wunderkey"];
-$wunderid = $_GET["wunderid"];
+//Wunderapi-Extensions *****************************
+date_default_timezone_set('UTC'); // Wunderground expects UTC
+$wunderkey = $_GET["wunderkey"];  // API-Key you get, when you register your own Wetherstation an Wunderground
+$wunderid = $_GET["wunderid"];    // ID of your Weatherstation
 
-$wunderdate=$today."+".date(H)."%3A".date(i)."%3A".date(s);
+$wunderdate=$today."+".date(H)."%3A".date(i)."%3A".date(s); // Wunderdate-Format
 
 if($values['temperature']!=NULL){
 $fahrenheit=round((($values['temperature']*1.8)+32),1);
