@@ -50,7 +50,7 @@ if (! isset($values["max_micro"])) { $values["max_micro"] = ""; }
 if (! isset($values["signal"])) { $values["signal"] = ""; } else { $values["signal"] = substr($values["signal"],0,-4); }
 
 //Wunderapi-Extensions *****************************
-date_default_timezone_set('UTC'); // Wunderground expects UTC
+// date_default_timezone_set('UTC'); // Wunderground expects UTC
 $wunderkey = $_GET["wunderkey"];  // API-Key you get, when you register your own Weatherstation an Wunderground
 $wunderid = $_GET["wunderid"];    // ID of your Weatherstation
 
