@@ -89,7 +89,6 @@ curl_close($curl);
 // Ende der Modifikation ***********************************
 
 
-
 $outfile = fopen($datafile,"a");
 // Logfile erweitert
 fwrite($outfile,$now.";".$values["durP1"].";".$values["ratioP1"].";".$values["P1"].";".$values["durP2"].";".$values["ratioP2"].";".$values["P2"].";".$values["SDS_P1"].";".$values["SDS_P2"].";".$values["temperature"].";".$values["humidity"].";".$dew.";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$wunderdate.";".$wunderid.";".$wunderurl.";".$resp."\n");
