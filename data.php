@@ -25,7 +25,7 @@ if (!file_exists('data')) {
 $datafile = "data/data-".$headers['Sensor']."-".$today.".csv";
 if (!file_exists($datafile)) {
 	$outfile = fopen($datafile,"a");
-	fwrite($outfile,"Time;durP1;ratioP1;P1;durP2;ratioP2;P2;SDS_P1;SDS_P2;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;Wunderdate;WunderID;WunderKey;WunderURL;WunderResponse\n");
+	fwrite($outfile,"Time;durP1;ratioP1;P1;durP2;ratioP2;P2;SDS_P1;SDS_P2;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;Wunderdate;WunderID;WunderURL;WunderResponse\n");
 	fclose($outfile);
 }
 
@@ -51,10 +51,10 @@ if (! isset($values["signal"])) { $values["signal"] = ""; } else { $values["sign
 
 //Wunderapi-Extensions *****************************
 date_default_timezone_set('UTC'); // Wunderground expects UTC
-$wunderkey = $_GET["wunderkey"];  // API-Key you get, when you register your own Wetherstation an Wunderground
+$wunderkey = $_GET["wunderkey"];  // API-Key you get, when you register your own Weatherstation an Wunderground
 $wunderid = $_GET["wunderid"];    // ID of your Weatherstation
 
-$wunderdate=$today."+".date(H)."%3A".date(i)."%3A".date(s); // Wunderdate-Format
+$wunderdate=$today."+".date(H)."%3A".date(i)."%3A".date(s);
 
 if($values['temperature']!=NULL){
 $fahrenheit=round((($values['temperature']*1.8)+32),1);
