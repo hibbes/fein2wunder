@@ -12,6 +12,6 @@ Das Skript errechnet zusätzlich aus relativer Luftfeuchte und Temperatur den Ta
 
 Es sind bisher nur die Sensoren SDS011, DHT22 und (ungetestet) BMP180 unterstützt.
 
-Einen Proxy zum Testen findet ihr hier: p238158.webspaceconfig.de/data.phpwunderid=(StationsID)&wunderkey=(API-Key) (Port 80)
+Einen Proxy zum Testen findet ihr hier: p238158.webspaceconfig.de/data.php?wunderid=(StationsID)&wunderkey=(API-Key) (Port 80)
 
 
