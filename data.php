@@ -71,7 +71,7 @@ else{$dewptf=round(($dew*1.8)+32,1);}
 if($values['BMP_pressure']!=NULL){
 	
  
- // Kalibrierung und Umrechnung nach Inches
+ // Umrechnung auf Druck über NN und nach Inches
  $calibrate = ($values['BMP_pressure']*$_GET["bmp1"]);
  $baroinch=round($calibrate/33.8638866667,2);
 }
