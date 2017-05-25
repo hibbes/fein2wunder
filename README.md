@@ -4,13 +4,17 @@ Dies ist ein PHP-Script, welches die Daten des OK-Lab-Stuttgart-Feinstaubsensors
 Folgende Einstellungen müssen in der Konfiguration des Sensors gesetzt werden:
 
 Eigene API-Haken setzen
+
 Server: (Der eigene Servername)
+
 Pfad: /data.php?id=XXXXX&key=YYYYY (XXXXX ist eure Wunderground-Stations-ID, YYYYY, euer API-Key dazu)
+
 optional gibt es noch den Wert bmp1, dies ist ein Floatwert zur Kalibirierung des Drucksensors. Dieser erreichnet sich aus $Sensorwert (5.stelliger Pascal-Wert. Im Webinterface werden leider bisher nur die ersten 4 Stellen angezeigt) / Referenzwert in Hektopascal. 
 
 Port: (Port auf dem der Webserver lauscht)
 
 Beispielkonfiguration:
+
 Server:
 p238158.webspaceconfig.de
 Pfad:
