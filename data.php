@@ -73,7 +73,6 @@ if($values['BMP_pressure']!=NULL){
  
  // Kalibrierung und Umrechnung nach Inches
  $calibrate = ($values['BMP_pressure']*$_GET["bmp1"]);
-
  $baroinch=round($calibrate/33.8638866667,2);
 }
 
