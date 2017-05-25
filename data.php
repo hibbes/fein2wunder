@@ -62,9 +62,12 @@ if($values['temperature']!=NULL){
 $fahrenheit=round((($values['temperature']*1.8)+32),1);
 }
 
-$dew = (((0.000002*pow($values['temperature'],4))+(0.0002*pow($values['temperature'],3))+(0.0095*pow($values['temperature'],2))+(0.337*$values['temperature'])+4.9034)*$values['humidity'])/100;
+if($values["humidity"]>=50){
+$dew =  $values['temperature'] - ((100 - $values["humidity"])/5.0);	
+} else {$dew = (((0.000002*pow($values['temperature'],4))+(0.0002*pow($values['temperature'],3))+(0.0095*pow($values['temperature'],2))+(0.337*$values['temperature'])+4.9034)*$values['humidity'])/100;}
+	
 
-if($dew==0){$dew=NULL;}
+if($dew==0){$dewptf=NULL;}
 else{$dewptf=round(($dew*1.8)+32,1);}
 
 // Aufbereitung der BMP-Werte
