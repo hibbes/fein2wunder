@@ -23,8 +23,8 @@ if (!file_exists('data')) {
 
 // save data values to CSV (one per day)
 $datafile = "data/data-".$headers['Sensor']."-".$today.".csv";
-if (!file_exists($datafile)) {
 
+if (!file_exists($datafile)) {
 	fwrite($outfile,"Time;durP1;ratioP1;P1;durP2;ratioP2;P2;SDS_P1;SDS_P2;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BMP_calibrate;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;Wunderdate;WunderID;WunderURL;WunderResponse\n");
 	fclose($outfile);
 }
@@ -53,8 +53,8 @@ if (! isset($values["signal"])) { $values["signal"] = ""; } else { $values["sign
 
 //Wunderapi-Extensions *****************************
 // date_default_timezone_set('UTC'); // Wunderground expects UTC
-$wunderkey = $_GET["wunderkey"];  // API-Key you get, when you register your own Weatherstation an Wunderground
-$wunderid = $_GET["wunderid"];    // ID of your Weatherstation
+$wunderkey = $_GET["key"];  // API-Key you get, when you register your own Weatherstation an Wunderground
+$wunderid = $_GET["id"];    // ID of your Weatherstation
 
 $wunderdate=$today."+".date(H)."%3A".date(i)."%3A".date(s);
 
@@ -67,15 +67,15 @@ $dew = (((0.000002*pow($values['temperature'],4))+(0.0002*pow($values['temperatu
 if($dew==0){$dew=NULL;}
 else{$dewptf=round(($dew*1.8)+32,1);}
 
-// Mein BMP sendet merkwürdige Pascalwerte, die allerdings im Verhältnis korrekt zu sein scheinen. Deshalb die merkwürdige Umrechnung nach Hektopascal
+// Aufbereitung der BMP-Werte
 if($values['BMP_pressure']!=NULL){
-	if(strcmp($wunderID, "IAU617")==0){
-  $calibrate=($values['BMP_pressure']/98331)*1020;}
-//Umrechnung nach Hektopascal
-  else{$calibrate=round($values['BMP_pressure']/100);}
- // Umrechnung nach Inches
-  $baroinch=round($calibrate/33.8638866667,2);
-} else {$baroinch = NULL;}
+	
+ 
+ // Kalibrierung und Umrechnung nach Inches
+ $calibrate = ($values['BMP_pressure']*0.01037313);
+
+ $baroinch=round(calibrate/33.8638866667,2);
+}
 
 $wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=".$wunderdate."&tempf=".$fahrenheit."&dewptf=".$dewptf."&baromin=".$baroinch."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
