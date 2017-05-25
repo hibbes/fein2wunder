@@ -74,7 +74,7 @@ if($values['BMP_pressure']!=NULL){
  // Kalibrierung und Umrechnung nach Inches
  $calibrate = ($values['BMP_pressure']*$_GET["bmp1"]);
 
- $baroinch=round(calibrate/33.8638866667,2);
+ $baroinch=round($calibrate/33.8638866667,2);
 }
 
 $wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=".$wunderdate."&tempf=".$fahrenheit."&dewptf=".$dewptf."&baromin=".$baroinch."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
