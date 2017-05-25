@@ -9,7 +9,7 @@ Server: (Der eigene Servername)
 
 Pfad: /data.php?id=XXXXX&key=YYYYY (XXXXX ist eure Wunderground-Stations-ID, YYYYY, euer API-Key dazu)
 
-optional gibt es noch den Wert bmp1, dies ist ein Floatwert zur Kalibirierung des Drucksensors. Dieser erreichnet sich aus $Sensorwert (5.stelliger Pascal-Wert. Im Webinterface werden leider bisher nur die ersten 4 Stellen angezeigt) / Referenzwert in Hektopascal. 
+optional gibt es noch den Wert bmp1, dies ist ein Floatwert zur Umrechnung der Druckwerte auf NN. Dieser erreichnet sich aus $Sensorwert (5.stelliger Pascal-Wert. Im Webinterface werden leider bisher nur die ersten 4 Stellen angezeigt) / einem Referenzwert in Hektopascal (am besten in Weather Undergrund nach dem Wert einer vertrauenswürdigen Wetterstation in der Nähe suchen). 
 
 Port: (Port auf dem der Webserver lauscht)
 
