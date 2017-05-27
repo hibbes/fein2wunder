@@ -68,7 +68,7 @@ $dew =  $values['temperature'] - ((100 - $values["humidity"])/5.0);
 	
 
 if($dew==0){$dewptf=NULL;}
-else{$dewptf=round(($dew*1.8)+32,1);}
+else{$dewptf=round(($dew*1.8)+32,2);}
 
 // Aufbereitung der BMP-Werte
 if($values['BMP_pressure']!=NULL){
@@ -76,7 +76,7 @@ if($values['BMP_pressure']!=NULL){
 
  // Umrechnung auf Druck über NN und nach Inches
  $calibrate = ($values['BMP_pressure']*$_GET["bmp1"]);
- $baroinch=round($calibrate/33.8638866667,2);
+ $baroinch=round($calibrate/33.8638866667,6);
 }
 
 $wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=now&tempf=".$fahrenheit."&dewptf=".$dewptf."&baromin=".$baroinch."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
