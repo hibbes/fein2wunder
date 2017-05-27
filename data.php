@@ -79,7 +79,7 @@ if($values['BMP_pressure']!=NULL){
  $baroinch=round($calibrate/33.8638866667,2);
 }
 
-$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=".$wunderdate."&tempf=".$fahrenheit."&dewptf=".$dewptf."&baromin=".$baroinch."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
+$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=now&tempf=".$fahrenheit."&dewptf=".$dewptf."&baromin=".$baroinch."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
 // Get cURL resource
  
