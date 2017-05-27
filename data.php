@@ -25,11 +25,10 @@ if (!file_exists('data')) {
 $datafile = "data/data-".$headers['Sensor']."-".$today.".csv";
 
 if (!file_exists($datafile)) {
-	fwrite($outfile,"Time;durP1;ratioP1;P1;durP2;ratioP2;P2;SDS_P1;SDS_P2;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BMP_calibrate;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;Wunderdate;WunderID;WunderURL;WunderResponse\n");
+	$outfile = fopen($datafile,"a");
+	fwrite($outfile,"Time;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BMP_calibrate;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;WunderID;WunderURL;WunderResponse\n");
 	fclose($outfile);
 }
-
-	
 
 if (! isset($values["durP1"])) { $values["durP1"] = ""; }
 if (! isset($values["ratioP1"])) { $values["ratioP1"] = ""; }
@@ -52,19 +51,17 @@ if (! isset($values["max_micro"])) { $values["max_micro"] = ""; }
 if (! isset($values["signal"])) { $values["signal"] = ""; } else { $values["signal"] = substr($values["signal"],0,-4); }
 
 //Wunderapi-Extensions *****************************
-// date_default_timezone_set('UTC'); // Wunderground expects UTC
+
 $wunderkey = $_GET["key"];  // API-Key you get, when you register your own Weatherstation an Wunderground
 $wunderid = $_GET["id"];    // ID of your Weatherstation
 
-$wunderdate=$today."+".date(H)."%3A".date(i)."%3A".date(s);
+// $wunderdate=$today."+".date(H)."%3A".date(i)."%3A".date(s);
 
 if($values['temperature']!=NULL){
-$fahrenheit=round((($values['temperature']*1.8)+32),1);
+$fahrenheit=round((($values['temperature']*1.8)+32),4);
 }
-
-//if($values["humidity"]>=50){
+// Taupunktberechnung
 $dew =  $values['temperature'] - ((100 - $values["humidity"])/5.0);	
-//} else {$dew = (((0.000002*pow($values['temperature'],4))+(0.0002*pow($values['temperature'],3))+(0.0095*pow($values['temperature'],2))+(0.337*$values['temperature'])+4.9034)*$values['humidity'])/100;}
 	
 
 if($dew==0){$dewptf=NULL;}
@@ -101,7 +98,7 @@ curl_close($curl);
 
 $outfile = fopen($datafile,"a");
 // Logfile erweitert
-fwrite($outfile,$now.";".$values["durP1"].";".$values["ratioP1"].";".$values["P1"].";".$values["durP2"].";".$values["ratioP2"].";".$values["P2"].";".$values["SDS_P1"].";".$values["SDS_P2"].";".$values["temperature"].";".$values["humidity"].";".$dew.";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$wunderdate.";".$wunderid.";".$wunderurl.";".$resp."\n");
+fwrite($outfile,$now.";".$values["temperature"].";".$values["humidity"].";".$dew.";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$wunderid.";".$wunderurl.";".$resp);
 fclose($outfile);
 // echo $resp;
 ?>
