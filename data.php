@@ -60,6 +60,13 @@ $wunderid = $_GET["id"];    // ID of your Weatherstation
 if($values['temperature']!=NULL){
 $fahrenheit=round((($values['temperature']*1.8)+32),4);
 }
+
+if($values['BMP_temperature']!=NULL){
+$fahrenheit2=round((($values['temperature']*1.8)+32),4);
+	}
+	
+	
+
 // Taupunktberechnung
 $dew =  $values['temperature'] - ((100 - $values["humidity"])/5.0);	
 	
@@ -76,7 +83,7 @@ if($values['BMP_pressure']!=NULL){
  $baroinch=round($calibrate/33.8638866667,4);
 }
 
-$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=now&tempf=".$fahrenheit."&dewptf=".$dewptf."&baromin=".$baroinch."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
+$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=now&tempf=".$fahrenheit."&temp2f=".$fahrenheit2."&dewptf=".$dewptf."&baromin=".$baroinch."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
 // Get cURL resource
  
