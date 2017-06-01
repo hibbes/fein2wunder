@@ -47,43 +47,44 @@ if (! isset($values["BME280_humidity"])) { $values["BME280_humidity"] = ""; }
 if (! isset($values["BME280_pressure"])) { $values["BME280_pressure"] = ""; }
 if (! isset($values["samples"])) { $values["samples"] = ""; }
 if (! isset($values["min_micro"])) { $values["min_micro"] = ""; }
-if (! isset($values["max_micro"])) { $values["max_micro"] = ""; }
 if (! isset($values["signal"])) { $values["signal"] = ""; } else { $values["signal"] = substr($values["signal"],0,-4); }
 
 //Wunderapi-Extensions *****************************
+if (! isset($values["fahrenheit"])) { $values["fahrenheit"] = ""; }
+if (! isset($values["fahrenheit2"])) { $values["fahrenheit2"] = ""; }
+if (! isset($values["dew"])) { $values["dew"] = ""; }
+if (! isset($values["dewptf"])) { $values["dewptf"] = ""; }
+if (! isset($values["key"])) { $values["key"] = $_GET["key"]; }
+if (! isset($values["id"])) { $values["id"] = $_GET["id"]; }
+if (! isset($values["baroinch"])) { $values["baroinch"] = ""; }
+if (! isset($values["bmp1calibrate"])) { $values["bmp1calibrate"] = $_GET["bmp1"]; }
 
-$wunderkey = $_GET["key"];  // API-Key you get, when you register your own Weatherstation an Wunderground
-$wunderid = $_GET["id"];    // ID of your Weatherstation
-
-// $wunderdate=$today."+".date(H)."%3A".date(i)."%3A".date(s);
 
 if($values['temperature']!=NULL){
-$fahrenheit=round((($values['temperature']*1.8)+32),4);
+	$values["fahrenheit"]=round((($values['temperature']*1.8)+32),4);
 }
 
 if($values['BMP_temperature']!=NULL){
-$fahrenheit2=round((($values['temperature']*1.8)+32),4);
+	$values["fahrenheit2"]=round((($values['temperature']*1.8)+32),4);
 	}
-	
-	
 
 // Taupunktberechnung
-$dew =  $values['temperature'] - ((100 - $values["humidity"])/5.0);	
+	$values["dew"] =  $values['temperature'] - ((100 - $values["humidity"])/5.0);	
 	
 
-if($dew==0){$dewptf=NULL;}
-else{$dewptf=round(($dew*1.8)+32,2);}
+	if($values["dew"] ==0){$values["dewptf"]=NULL;}
+	else{$values["dewptf"]=round(($dew*1.8)+32,2);}
 
 // Aufbereitung der BMP-Werte
 if($values['BMP_pressure']!=NULL){
 	
 
  // Umrechnung auf Druck über NN und nach Inches
- $calibrate = ($values['BMP_pressure']*$_GET["bmp1"]);
- $baroinch=$calibrate/33.8638866667;
+ $calibrate = ($values['BMP_pressure']*$values["bmp1calibrate"]);
+ $values["baroinch"]=$calibrate/33.8638866667;
 }
 
-$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$wunderid."&PASSWORD=".$wunderkey."&dateutc=now&tempf=".$fahrenheit."&temp2f=".$fahrenheit2."&dewptf=".$dewptf."&baromin=".$baroinch."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
+$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&temp2f=".$values["fahrenheit2"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
 // Get cURL resource
  
@@ -105,7 +106,7 @@ curl_close($curl);
 
 $outfile = fopen($datafile,"a");
 // Logfile erweitert
-fwrite($outfile,$now.";".$values["temperature"].";".$values["humidity"].";".$dew.";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$wunderid.";".$wunderurl.";".$resp);
+fwrite($outfile,$now.";".$values["temperature"].";".$values["humidity"].";".$values["dew"].";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$values["id"].";".$wunderurl.";".$resp);
 fclose($outfile);
 // echo $resp;
 ?>
