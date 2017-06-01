@@ -102,11 +102,11 @@ curl_close($curl);
 
 // Ende der Modifikation ***********************************
 
-
 $outfile = fopen($datafile,"a");
 // Logfile erweitert
 fwrite($outfile,$now.";".$values["temperature"].";".$values["humidity"].";".$dew.";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$wunderid.";".$wunderurl.";".$resp);
 fclose($outfile);
-// echo $resp;
+
+
 ?>
 ok
