@@ -64,7 +64,7 @@ if($values["temperature"]!=NULL){
 }
 
 // takes values from BMP and convert celsius to fahrenheit, (wunderground expects fahrenheit)
-if($values['BMP_temperature']!=NULL){
+if($values["BMP_temperature"]!=NULL){
 	$values["fahrenheit2"]=round((($values["temperature"]*1.8)+32),4);
 }
 
@@ -77,8 +77,8 @@ if($values["dew"] ==0){
 else{$values["dewptf"]=round(($values["dew"]*1.8)+32,2);}
 
 // calibrates the bmp_pressure to sea-level and converts to inches
-if($values['BMP_pressure']!=NULL){
-	$calibrate = ($values['BMP_pressure']*$values["bmp1calibrate"]);
+if($values["BMP_pressure"]!=NULL){
+	$calibrate = ($values["BMP_pressure"]*$values["bmp1calibrate"]);
 	$values["baroinch"]=$calibrate/33.8638866667;
 }
 
