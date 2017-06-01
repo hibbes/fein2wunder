@@ -59,33 +59,35 @@ if (! isset($values["id"])) { $values["id"] = $_GET["id"]; }
 if (! isset($values["baroinch"])) { $values["baroinch"] = ""; }
 if (! isset($values["bmp1calibrate"])) { $values["bmp1calibrate"] = $_GET["bmp1"]; }
 
-
+// takes values from DHT22 and convert celsius to fahrenheit, (wunderground expects fahrenheit)
 if($values['temperature']!=NULL){
 	$values["fahrenheit"]=round((($values['temperature']*1.8)+32),4);
 }
 
+// takes values from BMP and convert celsius to fahrenheit, (wunderground expects fahrenheit)
 if($values['BMP_temperature']!=NULL){
 	$values["fahrenheit2"]=round((($values['temperature']*1.8)+32),4);
 	}
 
-// Taupunktberechnung
+// calulates dew-point from dht22-Temperature and DHT22-humidity and converts to fahrenheit
 	$values["dew"] =  $values['temperature'] - ((100 - $values["humidity"])/5.0);	
 	
-
 	if($values["dew"] ==0){$values["dewptf"]=NULL;}
-	else{$values["dewptf"]=round(($dew*1.8)+32,2);}
+		else{$values["dewptf"]=round(($dew*1.8)+32,2);}
 
-// Aufbereitung der BMP-Werte
+// calibrates the bmp_pressure to sea-level and converts to inches
 if($values['BMP_pressure']!=NULL){
 	
 
- // Umrechnung auf Druck über NN und nach Inches
  $calibrate = ($values['BMP_pressure']*$values["bmp1calibrate"]);
  $values["baroinch"]=$calibrate/33.8638866667;
 }
 
+// generates wunderground-URL-String
 $wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&temp2f=".$values["fahrenheit2"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
+
+// sends Wundergrund url-String
 // Get cURL resource
  
 $curl = curl_init();
@@ -101,11 +103,10 @@ $resp = curl_exec($curl);
 // Close request to clear up some resources
 curl_close($curl);
 
-// Ende der Modifikation ***********************************
 
 
 $outfile = fopen($datafile,"a");
-// Logfile erweitert
+// Writes logfile with most of the values
 fwrite($outfile,$now.";".$values["temperature"].";".$values["humidity"].";".$values["dew"].";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$values["id"].";".$wunderurl.";".$resp);
 fclose($outfile);
 // echo $resp;
