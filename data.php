@@ -8,12 +8,15 @@ $results = json_decode($json,true);
 header_remove();
 $now = gmstrftime("%Y/%m/%d %H:%M:%S");
 $today = gmstrftime("%Y-%m-%d");
+
 // copy sensor data values to values array
 foreach ($results["sensordatavalues"] as $sensordatavalues) {
 	$values[$sensordatavalues["value_type"]] = $sensordatavalues["value"];
 }
+
 // print transmitted values
 echo "Sensor: ".$headers['Sensor']."\r\n";
+
 // check if data dir exists, create if not
 if (!file_exists('data')) {
 	mkdir('data', 0755, true);
@@ -48,7 +51,7 @@ if (! isset($values["samples"])) { $values["samples"] = ""; }
 if (! isset($values["min_micro"])) { $values["min_micro"] = ""; }
 if (! isset($values["signal"])) { $values["signal"] = ""; } else { $values["signal"] = substr($values["signal"],0,-4); }
 
-// Wunderapi-Extensions *****************************
+// Wunderapi-Extensions 
 if (! isset($values["fahrenheit"])) { $values["fahrenheit"] = ""; }
 if (! isset($values["fahrenheit2"])) { $values["fahrenheit2"] = ""; }
 if (! isset($values["dew"])) { $values["dew"] = ""; }
@@ -86,7 +89,6 @@ if($values["BMP_pressure"]!=NULL){
 $wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&temp2f=".$values["fahrenheit2"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
 // Get cURL resource and sends Wundergrund url-String
-
 $curl = curl_init();
 // Set some options - we are passing in a useragent too here
 curl_setopt_array($curl, array(
@@ -100,10 +102,9 @@ $resp = curl_exec($curl);
 // Close request to clear up some resources
 curl_close($curl);
 
-$outfile = fopen($datafile,"a");
 // Writes logfile with most of the values
+$outfile = fopen($datafile,"a");
 fwrite($outfile,$now.";".$values["temperature"].";".$values["humidity"].";".$values["dew"].";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$values["id"].";".$wunderurl.";".$resp);
 fclose($outfile);
-// echo $resp;
 ?>
 ok
