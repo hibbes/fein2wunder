@@ -66,14 +66,14 @@ if($values['temperature']!=NULL){
 
 // takes values from BMP and convert celsius to fahrenheit, (wunderground expects fahrenheit)
 if($values['BMP_temperature']!=NULL){
-	$values["fahrenheit2"]=round((($values['temperature']*1.8)+32),4);
+	$values["fahrenheit2"]=round((($values["temperature"]*1.8)+32),4);
 	}
 
 // calulates dew-point from dht22-Temperature and DHT22-humidity and converts to fahrenheit
-	$values["dew"] =  $values['temperature'] - ((100 - $values["humidity"])/5.0);	
+	$values["dew"] = $values["temperature"] - ((100 - $values["humidity"])/5.0);	
 	
 	if($values["dew"] ==0){$values["dewptf"]=NULL;}
-		else{$values["dewptf"]=round(($dew*1.8)+32,2);}
+		else{$values["dewptf"]=round(($values["dew"]*1.8)+32,2);}
 
 // calibrates the bmp_pressure to sea-level and converts to inches
 if($values['BMP_pressure']!=NULL){
