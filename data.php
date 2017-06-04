@@ -82,15 +82,20 @@ else{$values["dewptf"]=round(($values["dew"]*1.8)+32,2);}
 
 // calibrates the bmp_pressure to sea-level and converts to inches
 if($values["BMP_pressure"]!=NULL){
+	// if altitude is transmitted
 	if($values["altitude"]!=NULL){
 		$calibrate = ($values["BMP_pressure"]/pow(1-($_GET["alt"]/44330.0),5.255))/100;
-	} else { 
+	
+	} else {
+		// if calibration-factor ist transmitted
 			if($values["bmp1calibrate"]!=NULL){	
 				$calibrate = ($values["BMP_pressure"]*$values["bmp1calibrate"]);}
+				
+		// or nothing is transmitted (but BMP_pressure)
 			else{$calibrate = $values["BMP_pressure"];}
 		}
 	
-		
+	// convert to inches	
 	$values["baroinch"]=$calibrate/33.8638866667;
 }
 
