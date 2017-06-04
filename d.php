@@ -69,12 +69,12 @@ if (! isset($values["wpressure"])) { $values["wpressure"] = ""; }
 if($_GET["t"]==2){
 	$values["wtemperature"]=$values["BMP_temperature"];
 } else {
-	if($_GET["t"]==3){
-		$values["wtemperature"]=$values["BME280_temperature"];
-	}else {
+		if($_GET["t"]==3){
+			$values["wtemperature"]=$values["BME280_temperature"];
+		}else{
 			$values["wtemperature"]=$values["temperature"];
-		  }
-		  
+		}
+ }	  
 // Which Sensor for h?
  if($_GET["h"]==3){
  	$values["whumidity"]=$values["BME280_humidity"];
