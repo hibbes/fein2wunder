@@ -104,7 +104,7 @@ else{$values["dewptf"]=round(($values["dew"]*1.8)+32,2);}
 if($values["wpressure"]!=NULL){
 	// if altitude is transmitted
 	if($values["altitude"]!=NULL){
-		$calibrate = ($values["wpressure"]/pow(1-($_GET["alt"]/44330.0),5.255))/100;
+		$calibrate = ($values["wpressure"]/pow(1-($values["altitude"]/44330.0),5.255))/100;
 	
 	} else {
 		// if calibration-factor ist transmitted
