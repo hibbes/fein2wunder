@@ -28,7 +28,7 @@ $datafile = "data/data-".$headers['Sensor']."-".$today.".csv";
 
 if (!file_exists($datafile)) {
 	$outfile = fopen($datafile,"a");
-	fwrite($outfile,"Time;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BMP_calibrate;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;WunderID;WunderURL;WunderResponse\n");
+	fwrite($outfile,"Time;Altitude;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BMP_calibrate;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;WunderID;WunderURL;WunderResponse\n");
 	fclose($outfile);
 }
 
@@ -80,17 +80,17 @@ if($values["dew"] ==0){
 	
 else{$values["dewptf"]=round(($values["dew"]*1.8)+32,2);}
 
-// calibrates the bmp_pressure to sea-level (witch given Altimeter, or Calibration-Factor) and converts to inches
+// calibrates the bmp_pressure to sea-level and converts to inches
 if($values["BMP_pressure"]!=NULL){
-	if($values["bmp1calibrate"]!=NULL){	
-		$calibrate = ($values["BMP_pressure"]*$values["bmp1calibrate"]);}
-	else{ 
-		  if($values["altitude"]=!NULL){
-		  	$calibrate = ($values["BMP_pressure"]/pow(1-($values["altitude"]/44330.0),5.255))/100;}
+	if($values["altitude"]!=NULL){
+		$calibrate = ($values["BMP_pressure"]/pow(1-($_GET["alt"]/44330.0),5.255))/100;
+	} else { 
+			if($values["bmp1calibrate"]!=NULL){	
+				$calibrate = ($values["BMP_pressure"]*$values["bmp1calibrate"]);}
 			else{$calibrate = $values["BMP_pressure"];}
 		}
 	
-	// $calibrate = ($values["BMP_pressure"]*$values["bmp1calibrate"]);
+		
 	$values["baroinch"]=$calibrate/33.8638866667;
 }
 
@@ -113,7 +113,7 @@ curl_close($curl);
 
 // Writes logfile with most of the values
 $outfile = fopen($datafile,"a");
-fwrite($outfile,$now.";".$values["temperature"].";".$values["humidity"].";".$values["dew"].";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$values["id"].";".$wunderurl.";".$resp);
+fwrite($outfile,$now.";".$values["altitude"].";".$values["temperature"].";".$values["humidity"].";".$values["dew"].";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$values["id"].";".$wunderurl.";".$resp);
 fclose($outfile);
 ?>
 ok
