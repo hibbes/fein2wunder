@@ -58,20 +58,43 @@ if (! isset($values["key"])) { $values["key"] = $_GET["key"]; }
 if (! isset($values["id"])) { $values["id"] = $_GET["id"]; }
 if (! isset($values["baroinch"])) { $values["baroinch"] = ""; }
 if (! isset($values["altitude"])) { $values["altitude"] = $_GET["alt"]; }
-if (! isset($values["bmp1calibrate"])) { $values["bmp1calibrate"] = $_GET["bmp1"]; }
+if (! isset($values["bmpcalibrate"])) { $values["bmpcalibrate"] = $_GET["bmpc"]; }
+if (! isset($values["wtemperature"])) { $values["wtemperature"] = ""; }
+if (! isset($values["whumidity"])) { $values["whumidity"] = ""; }
+if (! isset($values["wpressure"])) { $values["wpressure"] = ""; }
 
-// takes values from DHT22 and convert celsius to fahrenheit, (wunderground expects fahrenheit)
-if($values["temperature"]!=NULL){
-	$values["fahrenheit"]=round((($values["temperature"]*1.8)+32),4);
+
+// Which Sensor for t?
+
+if($_GET["t"]==2){
+	$values["wtemperature"]=$values["BMP_temperature"];
+} else {
+	if($_GET["t"]==3){
+		$values["wtemperature"]=$values["BME280_temperature"];
+	}else {
+			$values["wtemperature"]=$values["temperature"];
+		  }
+		  
+// Which Sensor for h?
+ if($_GET["h"]==3){
+ 	$values["whumidity"]=$values["BME280_humidity"];
+ }else{
+ 	$values["whumidity"]=$values["humidity"];
+ }
+
+// Which Sensor for p?
+ if($_GET["p"]==3){
+ 	$values["wpressure"]=$values["BME280_pressure"];
+ }else{$values["wpressure"]=$values["BMP_pressure"];}
+ 
+// takes values from chosen Sensor and convert celsius to fahrenheit, (wunderground expects fahrenheit)
+if($values["wtemperature"]!=NULL){
+	$values["fahrenheit"]=round((($values["wtemperature"]*1.8)+32),4);
 }
 
-// takes values from BMP and convert celsius to fahrenheit, (wunderground expects fahrenheit)
-if($values["BMP_temperature"]!=NULL){
-	$values["fahrenheit2"]=round((($values["temperature"]*1.8)+32),4);
-}
 
 // calulates dew-point from dht22-Temperature and DHT22-humidity and converts to fahrenheit
-$values["dew"] = $values["temperature"] - ((100 - $values["humidity"])/5.0);
+$values["dew"] = $values["wtemperature"] - ((100 - $values["whumidity"])/5.0);
 
 if($values["dew"] ==0){
 	$values["dewptf"]=NULL;}
@@ -79,18 +102,18 @@ if($values["dew"] ==0){
 else{$values["dewptf"]=round(($values["dew"]*1.8)+32,2);}
 
 // calibrates the bmp_pressure to sea-level and converts to inches
-if($values["BMP_pressure"]!=NULL){
+if($values["wpressure"]!=NULL){
 	// if altitude is transmitted
 	if($values["altitude"]!=NULL){
-		$calibrate = ($values["BMP_pressure"]/pow(1-($_GET["alt"]/44330.0),5.255))/100;
+		$calibrate = ($values["wpressure"]/pow(1-($_GET["alt"]/44330.0),5.255))/100;
 	
 	} else {
 		// if calibration-factor ist transmitted
-			if($values["bmp1calibrate"]!=NULL){	
-				$calibrate = ($values["BMP_pressure"]*$values["bmp1calibrate"]);}
+			if($values["bmpcalibrate"]!=NULL){	
+				$calibrate = ($values["wpressure"]*$values["bmpcalibrate"]);}
 				
 		// or nothing is transmitted (but BMP_pressure)
-			else{$calibrate = $values["BMP_pressure"];}
+			else{$calibrate = $values["wpressure"];}
 		}
 	
 	// convert to inches	
@@ -98,7 +121,7 @@ if($values["BMP_pressure"]!=NULL){
 }
 
 // generates wunderground-URL-String
-$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&temp2f=".$values["fahrenheit2"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values['humidity']."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
+$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values["whumidity"]."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
 // Get cURL resource and sends Wundergrund url-String
 $curl = curl_init();
