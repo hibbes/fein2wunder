@@ -1,5 +1,5 @@
 <?php
-//bmp1=0.01037313
+
 // read sensor ID ('esp8266-'+ChipID)
 if (isset($_SERVER['HTTP_SENSOR'])) $headers['Sensor'] = $_SERVER['HTTP_SENSOR'];
 if (isset($_SERVER['HTTP_X_SENSOR']))$headers['Sensor'] = $_SERVER['HTTP_X_SENSOR'];
@@ -14,8 +14,6 @@ foreach ($results["sensordatavalues"] as $sensordatavalues) {
 	$values[$sensordatavalues["value_type"]] = $sensordatavalues["value"];
 }
 
-// print transmitted values
-echo "Sensor: ".$headers['Sensor']."\r\n";
 
 // check if data dir exists, create if not
 if (!file_exists('data')) {
