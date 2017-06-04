@@ -26,7 +26,7 @@ $datafile = "data/data-".$headers['Sensor']."-".$today.".csv";
 
 if (!file_exists($datafile)) {
 	$outfile = fopen($datafile,"a");
-	fwrite($outfile,"Time;Altitude;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BMP_calibrate;Inches;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;wTemperatur;wHumidity;wPressure;WunderID;WunderURL;WunderResponse\n");
+	fwrite($outfile,"Time;Altitude;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BMP_calibrate;P_Inches;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;wTemperatur;wHumidity;wPressure;WunderID;WunderURL;WunderResponse\n");
 	fclose($outfile);
 }
 
