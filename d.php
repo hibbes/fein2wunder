@@ -91,7 +91,6 @@ if($values["wtemperature"]!=NULL){
 	$values["fahrenheit"]=round((($values["wtemperature"]*1.8)+32),4);
 }
 
-
 // calulates dew-point from dht22-Temperature and DHT22-humidity and converts to fahrenheit
 $values["dew"] = $values["wtemperature"] - ((100 - $values["whumidity"])/5.0);
 
