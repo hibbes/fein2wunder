@@ -1,5 +1,5 @@
 <?php
-
+//bmp1=0.01037313
 // read sensor ID ('esp8266-'+ChipID)
 if (isset($_SERVER['HTTP_SENSOR'])) $headers['Sensor'] = $_SERVER['HTTP_SENSOR'];
 if (isset($_SERVER['HTTP_X_SENSOR']))$headers['Sensor'] = $_SERVER['HTTP_X_SENSOR'];
@@ -59,6 +59,7 @@ if (! isset($values["dewptf"])) { $values["dewptf"] = ""; }
 if (! isset($values["key"])) { $values["key"] = $_GET["key"]; }
 if (! isset($values["id"])) { $values["id"] = $_GET["id"]; }
 if (! isset($values["baroinch"])) { $values["baroinch"] = ""; }
+if (! isset($values["altitude"])) { $values["altitude"] = $_GET["alt"]; }
 if (! isset($values["bmp1calibrate"])) { $values["bmp1calibrate"] = $_GET["bmp1"]; }
 
 // takes values from DHT22 and convert celsius to fahrenheit, (wunderground expects fahrenheit)
@@ -79,9 +80,17 @@ if($values["dew"] ==0){
 	
 else{$values["dewptf"]=round(($values["dew"]*1.8)+32,2);}
 
-// calibrates the bmp_pressure to sea-level and converts to inches
+// calibrates the bmp_pressure to sea-level (witch given Altimeter, or Calibration-Factor) and converts to inches
 if($values["BMP_pressure"]!=NULL){
-	$calibrate = ($values["BMP_pressure"]*$values["bmp1calibrate"]);
+	if($values["bmp1calibrate"]!=NULL){	
+		$calibrate = ($values["BMP_pressure"]*$values["bmp1calibrate"]);}
+	else{ 
+		  if($values["altitude"]=!NULL){
+		  	$calibrate = ($values["BMP_pressure"]/pow(1-($values["altitude"]/44330.0),5.255))/100;}
+			else{$calibrate = $values["BMP_pressure"];}
+		}
+	
+	// $calibrate = ($values["BMP_pressure"]*$values["bmp1calibrate"]);
 	$values["baroinch"]=$calibrate/33.8638866667;
 }
 
