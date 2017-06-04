@@ -105,7 +105,7 @@ if($values["wpressure"]!=NULL){
 	if($values["altitude"]!=NULL){
 		$calibrate = ($values["wpressure"]/pow(1-($values["altitude"]/44330.0),5.255))/100;
 	
-	} else {
+	} else { 
 		// if calibration-factor ist transmitted
 			if($values["bmpcalibrate"]!=NULL){	
 				$calibrate = ($values["wpressure"]*$values["bmpcalibrate"]);}
