@@ -49,7 +49,7 @@ if (! isset($values["samples"])) { $values["samples"] = ""; }
 if (! isset($values["min_micro"])) { $values["min_micro"] = ""; }
 if (! isset($values["signal"])) { $values["signal"] = ""; } else { $values["signal"] = substr($values["signal"],0,-4); }
 
-// Wunderapi-Extensions 
+// Wunderapi-Extensions
 if (! isset($values["fahrenheit"])) { $values["fahrenheit"] = ""; }
 if (! isset($values["fahrenheit2"])) { $values["fahrenheit2"] = ""; }
 if (! isset($values["dew"])) { $values["dew"] = ""; }
@@ -73,7 +73,7 @@ if($_GET["t"]==2){
 		}else{
 			$values["wtemperature"]=$values["temperature"];
 		}
- }	  
+ }
 // which sensor for h?
  if($_GET["h"]==3){
  	$values["whumidity"]=$values["BME280_humidity"];
@@ -85,18 +85,20 @@ if($_GET["t"]==2){
  if($_GET["p"]==3){
  	$values["wpressure"]=$values["BME280_pressure"];
  }else{$values["wpressure"]=$values["BMP_pressure"];}
- 
+
 // takes values from chosen Sensor and convert celsius to fahrenheit, (wunderground expects fahrenheit)
 if($values["wtemperature"]!=NULL){
 	$values["fahrenheit"]=round((($values["wtemperature"]*1.8)+32),4);
 }
 
 // calulates dew-point from dht22-Temperature and DHT22-humidity and converts to fahrenheit
-$values["dew"] = $values["wtemperature"] - ((100 - $values["whumidity"])/5.0);
+if($values["wtemperature"] !=NULL){
+
+$values["dew"] = $values["wtemperature"] - ((100 - $values["whumidity"])/5.0);}
 
 if($values["dew"] ==0){
 	$values["dewptf"]=NULL;}
-	
+
 else{$values["dewptf"]=round(($values["dew"]*1.8)+32,2);}
 
 // calibrates the bmp_pressure to sea-level and converts to inches
@@ -104,17 +106,17 @@ if($values["wpressure"]!=NULL){
 	// if altitude is transmitted
 	if($values["altitude"]!=NULL){
 		$calibrate = ($values["wpressure"]/pow(1-($values["altitude"]/44330.0),5.255))/100;
-	
-	} else { 
+
+	} else {
 		// if calibration-factor ist transmitted
-			if($values["bmpcalibrate"]!=NULL){	
+			if($values["bmpcalibrate"]!=NULL){
 				$calibrate = ($values["wpressure"]*$values["bmpcalibrate"]);}
-				
+
 		// or nothing is transmitted (but BMP_pressure)
 			else{$calibrate = $values["wpressure"];}
 		}
-	
-	// convert to inches	
+
+	// convert to inches
 	$values["baroinch"]=$calibrate/33.8638866667;
 }
 
