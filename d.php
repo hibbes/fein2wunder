@@ -123,22 +123,23 @@ if($values["wpressure"]!=NULL){
 // generates wunderground-URL-String
 
 if($values["wtemperature"] !=NULL && $values["whumidity"]!=NULL){
-$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values["whumidity"]."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
-}
-// Get cURL resource and sends Wundergrund url-String
-$curl = curl_init();
-// Set some options - we are passing in a useragent too here
-curl_setopt_array($curl, array(
-		CURLOPT_RETURNTRANSFER => 1,
-		CURLOPT_URL => $wunderurl,
-		CURLOPT_USERAGENT => 'ESP-Wunderground-Update'
-));
-// Send the request & save response to $resp
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-$resp = curl_exec($curl);
-// Close request to clear up some resources
-curl_close($curl);
+	$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values["whumidity"]."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
+	// Get cURL resource and sends Wundergrund url-String
+	$curl = curl_init();
+	// Set some options - we are passing in a useragent too here
+	curl_setopt_array($curl, array(
+			CURLOPT_RETURNTRANSFER => 1,
+			CURLOPT_URL => $wunderurl,
+			CURLOPT_USERAGENT => 'ESP-Wunderground-Update'
+	));
+	// Send the request & save response to $resp
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	$resp = curl_exec($curl);
+	// Close request to clear up some resources
+	curl_close($curl);
+}
+else{$resp="No T OR H\n";}
 // Writes logfile with most of the values
 $outfile = fopen($datafile,"a");
 fwrite($outfile,$now.";".$values["altitude"].";".$values["temperature"].";".$values["humidity"].";".$values["dew"].";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["baroinch"].";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["SDS_P1"].";".$values["SDS_P2"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$values["wtemperature"].";".$values["whumidity"].";".$values["wpressure"].";".$values["id"].";".$wunderurl.";".$resp);
