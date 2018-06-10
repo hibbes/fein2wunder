@@ -13,6 +13,17 @@ optional gibt es noch den Wert bmp1, dies ist ein Floatwert zur Umrechnung der D
 
 Alternativ dazu kann man auch einfach die Höhe der Station über NN in Metern mitgeben. Der Parameter heißt dann "alt"
 
+Mit den Parametern "t" und "h" kann bestimmt werden welcher der verfügbaren Temperatur- und Feuchtigkeitssensoren als Datenquelle verwendet werden.
+
+Standard für Temperatur und relative Feuschte ist der DHT-22
+Standard für Druck ist der BMP_180-Sensor
+
+t=2 --> Temperatur vom BMP_180-Sensor
+t=3 --> Temperatur vom BME_280-Sensor
+
+h=3 --> relative Feuchte vom BME_280-Sensor
+
+p=2 --> Druck vom BME_280 Sensor
 
 Port: (Port auf dem der Webserver lauscht)
 
@@ -27,6 +38,8 @@ oder:
 /data.php?id=IOFFENBU87&key=c654738vxgdu&bmp1=0.01037313
 oder: 
 /data.php?id=IOFFENBU87&key=c654738vxgdu&alt=360
+oder:
+/data.php?id=IOFFENBU87&key=c654738vxgdu&alt=360&t=1&h=2&h=3&p=2
 
 Port:
 80
