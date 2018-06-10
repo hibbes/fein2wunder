@@ -1,2 +1,0 @@
-Time;Altitude;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BMP_calibrate;Inches;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;WunderID;WunderURL;WunderResponse
-2017/06/04 18:35:31;;19.50;47.90;9.08;;;;;;;;750436;182;26534;;IOFFENBU57;https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=IOFFENBU57&PASSWORD=8oba6vin&dateutc=now&tempf=67.1&temp2f=&dewptf=48.34&baromin=&humidity=47.90&AqPM2.5=2.30&AqPM10=3.12&softwaretype=esp8266-10721751&action=updateraw;success
