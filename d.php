@@ -92,7 +92,7 @@ if($values["wtemperature"]!=NULL){
 }
 
 // calulates dew-point from dht22-Temperature and DHT22-humidity and converts to fahrenheit
-if($values["temperature"] !=NULL && $values["humidity"]!=NULL){
+if($values["wtemperature"] !=NULL && $values["whumidity"]!=NULL){
 	$values["dew"] = $values["wtemperature"] - ((100 - $values["whumidity"])/5.0);
 }
 
@@ -121,8 +121,10 @@ if($values["wpressure"]!=NULL){
 }
 
 // generates wunderground-URL-String
-$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values["whumidity"]."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
+if($values["wtemperature"] !=NULL && $values["whumidity"]!=NULL){
+$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values["whumidity"]."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
+}
 // Get cURL resource and sends Wundergrund url-String
 $curl = curl_init();
 // Set some options - we are passing in a useragent too here
