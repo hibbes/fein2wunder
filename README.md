@@ -1,5 +1,5 @@
 # fein2wunder
-Dies ist ein PHP-Script, welches die Daten des OK-Lab-Stuttgart-Feinstaubsensors entgegennimmt, für das Wonderground-Netzwerk aufbereitet und dorthin sendet.
+Dies ist ein PHP-Script, welches die Daten des OK-Lab-Stuttgart-Feinstaubsensors (luftdaten.info) entgegennimmt, für das Wunderground-Netzwerk aufbereitet und dorthin sendet.
 
 Folgende Einstellungen müssen in der Konfiguration des Sensors gesetzt werden:
 
