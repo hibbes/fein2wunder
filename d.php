@@ -26,7 +26,7 @@ $datafile = "data/data-".$headers['Sensor']."-".$today.".csv";
 
 if (!file_exists($datafile)) {
 	$outfile = fopen($datafile,"a");
-	fwrite($outfile,"Time;Altitude;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BMP_calibrate;P_Inches;BME280_temperature;BME280_humidity;BME280_pressure;Samples;Min_cycle;Max_cycle;Signal;wTemperatur;wHumidity;wPressure;WunderID;WunderURL;WunderResponse\n");
+	fwrite($outfile,"Time;Altitude;Temp;Humidity;Dew;BMP_temperature;BMP_pressure;BMP_calibrate;P_Inches;BME280_temperature;BME280_humidity;BME280_pressure;PM2_5;PM10;Samples;Min_cycle;Max_cycle;Signal;wTemperatur;wHumidity;wPressure;WunderID;WunderURL;WunderResponse\n");
 	fclose($outfile);
 }
 
@@ -92,8 +92,9 @@ if($values["wtemperature"]!=NULL){
 }
 
 // calulates dew-point from dht22-Temperature and DHT22-humidity and converts to fahrenheit
-if($values["wtemperature"] !=NULL && $values["humidity"]!=NULL){
-$values["dew"] = $values["wtemperature"] - ((100 - $values["whumidity"])/5.0);}
+if($values["temperature"] !=NULL && $values["humidity"]!=NULL){
+	$values["dew"] = $values["wtemperature"] - ((100 - $values["whumidity"])/5.0);
+}
 
 if($values["dew"] ==0){
 	$values["dewptf"]=NULL;}
@@ -138,7 +139,6 @@ curl_close($curl);
 
 // Writes logfile with most of the values
 $outfile = fopen($datafile,"a");
-fwrite($outfile,$now.";".$values["altitude"].";".$values["temperature"].";".$values["humidity"].";".$values["dew"].";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["baroinch"].";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$values["wtemperature"].";".$values["whumidity"].";".$values["wpressure"].";".$values["id"].";".$wunderurl.";".$resp);
+fwrite($outfile,$now.";".$values["altitude"].";".$values["temperature"].";".$values["humidity"].";".$values["dew"].";".$values["BMP_temperature"].";".$values["BMP_pressure"].";".$calibrate.";".$values["baroinch"].";".$values["BME280_temperature"].";".$values["BME280_humidity"].";".$values["BME280_pressure"].";".$values["SDS_P1"].";".$values["SDS_P2"].";".$values["samples"].";".$values["min_micro"].";".$values["max_micro"].";".$values["signal"].";".$values["wtemperature"].";".$values["whumidity"].";".$values["wpressure"].";".$values["id"].";".$wunderurl.";".$resp);
 fclose($outfile);
 ?>
-ok
