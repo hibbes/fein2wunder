@@ -123,7 +123,7 @@ if($values["wpressure"]!=NULL){
 // generates wunderground-URL-String
 
 if($values["wtemperature"] !=NULL && $values["whumidity"]!=NULL){
-	$wunderurl="https://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values["whumidity"]."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
+	$wunderurl="http://weatherstation.wunderground.com/weatherstation/updateweatherstation.php?ID=".$values["id"]."&PASSWORD=".$values["key"]."&dateutc=now&tempf=".$values["fahrenheit"]."&dewptf=".$values["dewptf"]."&baromin=".$values["baroinch"]."&humidity=".$values["whumidity"]."&AqPM2.5=".$values['SDS_P2']."&AqPM10=".$values['SDS_P1']."&softwaretype=".$headers['Sensor']."&action=updateraw";
 
 	// Get cURL resource and sends Wundergrund url-String
 	$curl = curl_init();
