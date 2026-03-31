@@ -1,51 +1,47 @@
 # fein2wunder
-Dies ist ein PHP-Script, welches die Daten des OK-Lab-Stuttgart-Feinstaubsensors (luftdaten.info) entgegennimmt, für das Wunderground-Netzwerk aufbereitet und dorthin sendet.
 
-Folgende Einstellungen müssen in der Konfiguration des Sensors gesetzt werden:
+PHP-Script, das Daten eines **OK-Lab / sensor.community Feinstaubsensors** (NodeMCU/ESP8266) empfängt, ins Weather Underground (WU)-Format umrechnet und dorthin weiterleitet. Zusätzlich werden alle Messwerte in täglichen CSV-Dateien archiviert.
 
-Eigene API-Haken setzen
+## Einrichtung
 
-Server: (Der eigene Servername)
+In der Sensor-Weboberfläche unter *Eigene API*:
 
-Pfad: /d.php?id=XXXXX&key=YYYYY (XXXXX ist eure Wunderground-Stations-ID, YYYYY, euer API-Key dazu)
+| Feld | Wert |
+|------|------|
+| Server | `dein-server.example.com` |
+| Pfad | `/d.php?id=STATIONSID&key=APIKEY` |
+| Port | `80` (oder `443` für HTTPS) |
 
-optional gibt es noch den Wert bmp1, dies ist ein Floatwert zur Umrechnung der Druckwerte auf NN. Dieser erreichnet sich aus $Sensorwert (5.stelliger Pascal-Wert. Im Webinterface werden leider bisher nur die ersten 4 Stellen angezeigt) / einem Referenzwert in Hektopascal (am besten in Weather Undergrund nach dem Wert einer vertrauenswürdigen Wetterstation in der Nähe suchen).
+### Optionale URL-Parameter
 
-Alternativ dazu kann man auch einfach die Höhe der Station über NN in Metern mitgeben. Der Parameter heißt dann "alt"
+| Parameter | Beschreibung |
+|-----------|-------------|
+| `alt=360` | Stationshöhe in Metern über NN (für Druckkorrektur auf Meereshöhe) |
+| `bmpc=1.01234` | Manueller Druckkorrekturfaktor (Alternative zu `alt`) |
+| `t=1\|2\|3` | Temperatursensor: 1=DHT22 (Standard), 2=BMP180, 3=BME280 |
+| `h=1\|3` | Feuchtigkeitssensor: 1=DHT22 (Standard), 3=BME280 |
+| `p=1\|2` | Drucksensor: 1=BMP180 (Standard), 2=BME280 |
 
-Mit den Parametern "t" und "h" kann bestimmt werden welcher der verfügbaren Temperatur- und Feuchtigkeitssensoren als Datenquelle verwendet werden.
+**Beispiele:**
+```
+/d.php?id=IOFFENBU87&key=c654738vxgdu&alt=360
+/d.php?id=IOFFENBU87&key=c654738vxgdu&alt=360&t=3&h=3&p=2
+```
 
-Standard für Temperatur und relative Feuschte ist der DHT-22
-Standard für Druck ist der BMP_180-Sensor
+## Ausgabe / Logging
 
-t=2 --> Temperatur vom BMP_180-Sensor
-t=3 --> Temperatur vom BME_280-Sensor
+- `incoming.log` – Rohdaten jedes empfangenen POST-Requests
+- `data/data-SENSORID-DATUM.csv` – Tägliche CSV mit allen Messwerten
 
-h=3 --> relative Feuchte vom BME_280-Sensor
+## Unterstützte Sensoren
 
-p=2 --> Druck vom BME_280 Sensor
+| Sensor | Temperatur | Feuchtigkeit | Druck |
+|--------|-----------|-------------|-------|
+| DHT22 | ✅ (Standard) | ✅ (Standard) | — |
+| BMP180 | ✅ (`t=2`) | — | ✅ (Standard) |
+| BME280 | ✅ (`t=3`) | ✅ (`h=3`) | ✅ (`p=2`) |
+| SDS011 | — | — | — (PM2.5/PM10) |
 
-Port: (Port auf dem der Webserver lauscht)
+## Lizenz
 
-Beispielkonfiguration:
-
-Server:
-p238158.webspaceconfig.de
-Pfad:
-
-/data.php?id=IOFFENBU87&key=c654738vxgdu
-oder:
-/data.php?id=IOFFENBU87&key=c654738vxgdu&bmp1=0.01037313
-oder:
-/data.php?id=IOFFENBU87&key=c654738vxgdu&alt=360
-oder:
-/data.php?id=IOFFENBU87&key=c654738vxgdu&alt=360&t=1&h=2&h=3&p=2
-
-Port:
-80
-
-Das Skript errechnet zusätzlich aus relativer Luftfeuchte und Temperatur den Taupunkt und sendet den Wert ebenfalls mit.
-
-Es sind bisher nur die Sensoren SDS011, DHT22 und BMP180 unterstützt (habe z. Zt. keine weiteren Sensoren zum Ausprobieren)
-
-Das Skript läuft bereits auf folgendem Server und kann dort gerne ausprobiert werden: p238158.webspaceconfig.de/d.php (Port 80)
+MIT
